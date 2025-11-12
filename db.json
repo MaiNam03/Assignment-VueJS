@@ -1,0 +1,375 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Mì Spaghetti Bolognese",
+      "description": "Mì Ý sốt bò bằm nấu chậm đậm đà, phủ phô mai Parmesan.",
+      "price": 125000,
+      "category": "Mì Ý",
+      "status": "available",
+      "ordersCount": 42,
+      "revenue": 5250000,
+      "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "2",
+      "name": "Nước ngọt Coca-Cola",
+      "description": "Coca-Cola chai thuỷ tinh ướp lạnh, phục vụ kèm đá và lát chanh.",
+      "price": 35000,
+      "category": "Đồ uống",
+      "status": "available",
+      "ordersCount": 58,
+      "revenue": 2030000,
+      "image": "https://images.unsplash.com/photo-1510626176961-4b37d0f0b831?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "3",
+      "name": "Kem Vanilla",
+      "description": "Kem vanilla Madagascar béo mịn, rưới thêm sốt caramel.",
+      "price": 60000,
+      "category": "Tráng miệng",
+      "status": "unavailable",
+      "ordersCount": 33,
+      "revenue": 1980000,
+      "image": "https://images.unsplash.com/photo-1488900128323-21503983a07e?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "4",
+      "name": "Salad rau củ tươi",
+      "description": "Rau xanh trộn cà chua bi, dưa leo, phô mai feta và sốt giấm balsamic.",
+      "price": 80000,
+      "category": "Salad",
+      "status": "available",
+      "ordersCount": 27,
+      "revenue": 2160000,
+      "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "5",
+      "name": "Bánh Tiramisu",
+      "description": "Bánh ladyfingers thấm espresso, phủ mascarpone và bột cacao.",
+      "price": 75000,
+      "category": "Tráng miệng",
+      "status": "available",
+      "ordersCount": 46,
+      "revenue": 3450000,
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "6",
+      "name": "Penne sốt Alfredo",
+      "description": "Sốt Alfredo kem béo với phô mai parmesan và ngò tây trên mì penne.",
+      "price": 110000,
+      "category": "Mì Ý",
+      "status": "available",
+      "ordersCount": 35,
+      "revenue": 3850000,
+      "image": "https://images.unsplash.com/photo-1528736235302-52922df5c122?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "7",
+      "name": "Sinh tố xoài",
+      "description": "Xoài chín xay cùng sữa chua và chút chanh, vị nhiệt đới mát lạnh.",
+      "price": 45000,
+      "category": "Đồ uống",
+      "status": "available",
+      "ordersCount": 29,
+      "revenue": 1305000,
+      "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "8",
+      "name": "Salad pasta Caprese",
+      "description": "Cà chua bi, phô mai mozzarella, pesto húng quế và sốt balsamic.",
+      "price": 95000,
+      "category": "Mì Ý",
+      "status": "unavailable",
+      "ordersCount": 18,
+      "revenue": 1710000,
+      "image": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "9",
+      "name": "Edamame chuẩn vị Nhật",
+      "description": "Đậu nành Nhật hấp muối biển và mè rang, thích hợp làm khai vị.",
+      "price": 85000,
+      "category": "Khai vị",
+      "status": "available",
+      "ordersCount": 22,
+      "revenue": 1870000,
+      "image": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "10",
+      "name": "Trà chanh mật ong",
+      "description": "Trà đen ủ lạnh với chanh tươi và mật ong nguyên chất.",
+      "price": 45000,
+      "category": "Đồ uống",
+      "status": "available",
+      "ordersCount": 31,
+      "revenue": 1395000,
+      "image": "https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "11",
+      "name": "Cappuccino",
+      "description": "Cà phê espresso phối cùng sữa nóng và bọt sữa mịn.",
+      "price": 65000,
+      "category": "Đồ uống",
+      "status": "available",
+      "ordersCount": 44,
+      "revenue": 2860000,
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "12",
+      "name": "Latte",
+      "description": "Espresso đậm đà với sữa tươi và lớp foam nhẹ nhàng.",
+      "price": 65000,
+      "category": "Đồ uống",
+      "status": "available",
+      "ordersCount": 38,
+      "revenue": 2470000,
+      "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "13",
+      "name": "Bánh croissant bơ",
+      "description": "Croissant thơm bơ Pháp, giòn xốp nhiều lớp.",
+      "price": 55000,
+      "category": "Bánh ngọt",
+      "status": "available",
+      "ordersCount": 26,
+      "revenue": 1430000,
+      "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "14",
+      "name": "Cheeseburger Classic",
+      "description": "Bánh burger bò nướng, phô mai cheddar, rau tươi và sốt đặc biệt.",
+      "price": 135000,
+      "category": "Món chính",
+      "status": "available",
+      "ordersCount": 52,
+      "revenue": 7020000,
+      "image": "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "15",
+      "name": "Khoai tây chiên giòn",
+      "description": "Khoai tây tươi cắt sợi, chiên giòn vàng với muối biển.",
+      "price": 65000,
+      "category": "Khai vị",
+      "status": "available",
+      "ordersCount": 47,
+      "revenue": 3055000,
+      "image": "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "16",
+      "name": "Nước ép cam tươi",
+      "description": "Cam vàng ép lạnh giữ trọn vitamin và hương vị tự nhiên.",
+      "price": 55000,
+      "category": "Đồ uống",
+      "status": "available",
+      "ordersCount": 34,
+      "revenue": 1870000,
+      "image": "https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "17",
+      "name": "Cà phê Americano",
+      "description": "Espresso pha loãng với nước nóng, hương vị cân bằng.",
+      "price": 45000,
+      "category": "Đồ uống",
+      "status": "available",
+      "ordersCount": 60,
+      "revenue": 2700000,
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "18",
+      "name": "Bánh Apple Pie",
+      "description": "Bánh táo nướng với quế thơm và lớp vỏ giòn rụm.",
+      "price": 78000,
+      "category": "Bánh ngọt",
+      "status": "available",
+      "ordersCount": 41,
+      "revenue": 3198000,
+      "image": "https://images.unsplash.com/photo-1514986888952-8cd320577b68?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "19",
+      "name": "Caesar Salad",
+      "description": "Xà lách romaine, phô mai parmesan, sốt Caesar và bánh mì nướng.",
+      "price": 98000,
+      "category": "Salad",
+      "status": "available",
+      "ordersCount": 33,
+      "revenue": 3234000,
+      "image": "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "20",
+      "name": "Soda vị chanh",
+      "description": "Soda lạnh pha chanh vàng và sirô đường mía thơm nhẹ.",
+      "price": 35000,
+      "category": "Đồ uống",
+      "status": "available",
+      "ordersCount": 24,
+      "revenue": 840000,
+      "image": "https://images.unsplash.com/photo-1510626176961-4b37d0f0b831?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "121a",
+      "ordersCount": 0,
+      "revenue": 0,
+      "name": "test add",
+      "price": 111000,
+      "category": "Mì Ý",
+      "status": "available",
+      "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=300&q=80",
+      "description": "chỉ là test add"
+    }
+  ],
+  "orders": [
+    {
+      "id": "#355338",
+      "customer": "Albina Ortiz",
+      "items": "Mì Spaghetti Bolognese x1, Edamame chuẩn vị Nhật x1, Trà chanh mật ong x1",
+      "total": 255000,
+      "status": "pending",
+      "createdAt": "2025-11-05T09:45:00",
+      "address": "28 Nguyễn Trãi, Quận 1, TP. HCM",
+      "payment": "Ví MoMo"
+    },
+    {
+      "id": "#104389",
+      "customer": "Sandrine Reilly",
+      "items": "Bánh Apple Pie x1, Cappuccino x1",
+      "total": 143000,
+      "status": "delivered",
+      "createdAt": "2025-11-04T19:10:00",
+      "address": "102 Pasteur, Quận 3, TP. HCM",
+      "payment": "Thẻ tín dụng"
+    },
+    {
+      "id": "#298445",
+      "customer": "Orlando Mendez",
+      "items": "Cà phê Americano x1, Bánh croissant bơ x2",
+      "total": 155000,
+      "status": "shipped",
+      "createdAt": "2025-11-04T08:35:00",
+      "address": "12 Lê Lợi, Quận 1, TP. HCM",
+      "payment": "Tiền mặt"
+    },
+    {
+      "id": "#493221",
+      "customer": "Amelia Velasquez",
+      "items": "Cheeseburger Classic x1, Khoai tây chiên giòn x1, Soda vị chanh x1",
+      "total": 235000,
+      "status": "processing",
+      "createdAt": "2025-11-03T20:25:00",
+      "address": "55 Nguyễn Huệ, Quận 1, TP. HCM",
+      "payment": "Ví ZaloPay"
+    },
+    {
+      "id": "#759113",
+      "customer": "Reyansh Patel",
+      "items": "Caesar Salad x1, Nước ép cam tươi x1",
+      "total": 153000,
+      "status": "pending",
+      "createdAt": "2025-11-03T11:15:00",
+      "address": "18 Trần Não, TP. Thủ Đức",
+      "payment": "Chuyển khoản"
+    },
+    {
+      "id": "#602814",
+      "customer": "Monica Perez",
+      "items": "Mì Spaghetti Bolognese x1, Nước ngọt Coca-Cola x1, Khoai tây chiên giòn x1",
+      "total": 225000,
+      "status": "delivered",
+      "createdAt": "2025-11-02T18:55:00",
+      "address": "87 Điện Biên Phủ, Quận Bình Thạnh",
+      "payment": "Thẻ ghi nợ"
+    }
+  ],
+  "customers": [
+    {
+      "id": "1",
+      "name": "Albina Ortiz",
+      "email": "albina.ortiz@example.com",
+      "phone": "0901 234 567",
+      "tier": "VIP",
+      "totalOrders": 22,
+      "totalSpend": 15200000,
+      "joinedAt": "2025-11-02",
+      "address": "28 Nguyễn Trãi, Quận 1, TP. HCM",
+      "notes": "Ưa thích các món khai vị nhẹ."
+    },
+    {
+      "id": "2",
+      "name": "Sandrine Reilly",
+      "email": "sandrine.reilly@example.com",
+      "phone": "0902 345 678",
+      "tier": "Thân thiết",
+      "totalOrders": 14,
+      "totalSpend": 9850000,
+      "joinedAt": "2025-11-03",
+      "address": "102 Pasteur, Quận 3, TP. HCM",
+      "notes": "Thường đặt bánh ngọt mang về."
+    },
+    {
+      "id": "3",
+      "name": "Orlando Mendez",
+      "email": "orlando.mendez@example.com",
+      "phone": "0903 987 654",
+      "tier": "Standard",
+      "totalOrders": 6,
+      "totalSpend": 3250000,
+      "joinedAt": "2024-01-12",
+      "address": "12 Lê Lợi, Quận 1, TP. HCM",
+      "notes": "Quan tâm các chương trình ưu đãi đồ uống."
+    },
+    {
+      "id": "4",
+      "name": "Amelia Velasquez",
+      "email": "amelia.velasquez@example.com",
+      "phone": "0904 765 432",
+      "tier": "VIP",
+      "totalOrders": 20,
+      "totalSpend": 15200000,
+      "joinedAt": "2022-09-05",
+      "address": "55 Nguyễn Huệ, Quận 1, TP. HCM",
+      "notes": "Ưa thích bàn gần cửa sổ, hay đặt tiệc nhỏ."
+    },
+    {
+      "id": "5",
+      "name": "Reyansh Patel",
+      "email": "reyansh.patel@example.com",
+      "phone": "0905 111 222",
+      "tier": "Thân thiết",
+      "totalOrders": 10,
+      "totalSpend": 7200000,
+      "joinedAt": "2023-11-18",
+      "address": "18 Trần Não, TP. Thủ Đức",
+      "notes": "Thích món salad và đồ uống giải nhiệt."
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin123",
+      "name": "Quản trị viên",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "username": "sales",
+      "password": "sales123",
+      "name": "Nhân viên bán hàng",
+      "role": "sales"
+    }
+  ]
+}
