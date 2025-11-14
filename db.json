@@ -6,7 +6,7 @@
       "description": "Mì Ý sốt bò bằm nấu chậm đậm đà, phủ phô mai Parmesan.",
       "price": 125000,
       "category": "Mì Ý",
-      "status": "available",
+      "status": "unavailable",
       "ordersCount": 42,
       "revenue": 5250000,
       "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=400&q=80"
@@ -20,7 +20,7 @@
       "status": "available",
       "ordersCount": 58,
       "revenue": 2030000,
-      "image": "https://images.unsplash.com/photo-1510626176961-4b37d0f0b831?auto=format&fit=crop&w=400&q=80"
+      "image": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     },
     {
       "id": "3",
@@ -108,7 +108,7 @@
       "status": "available",
       "ordersCount": 31,
       "revenue": 1395000,
-      "image": "https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&fit=crop&w=400&q=80"
+      "image": "https://media.istockphoto.com/id/1204404992/photo/lemon-ice-tea.webp?a=1&b=1&s=612x612&w=0&k=20&c=6A4bDTg5zKBMJI8OPipaQtufInewxSwuDkRTqnn5isk="
     },
     {
       "id": "11",
@@ -141,7 +141,7 @@
       "status": "available",
       "ordersCount": 26,
       "revenue": 1430000,
-      "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80"
+      "image": "https://plus.unsplash.com/premium_photo-1661743823829-326b78143b30?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y3JvaXNzYW50fGVufDB8fDB8fHww"
     },
     {
       "id": "14",
@@ -155,26 +155,15 @@
       "image": "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=400&q=80"
     },
     {
-      "id": "15",
-      "name": "Khoai tây chiên giòn",
-      "description": "Khoai tây tươi cắt sợi, chiên giòn vàng với muối biển.",
-      "price": 65000,
-      "category": "Khai vị",
-      "status": "available",
-      "ordersCount": 47,
-      "revenue": 3055000,
-      "image": "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=400&q=80"
-    },
-    {
       "id": "16",
       "name": "Nước ép cam tươi",
       "description": "Cam vàng ép lạnh giữ trọn vitamin và hương vị tự nhiên.",
       "price": 55000,
       "category": "Đồ uống",
-      "status": "available",
+      "status": "unavailable",
       "ordersCount": 34,
       "revenue": 1870000,
-      "image": "https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=400&q=80"
+      "image": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8b3JhbmdlJTIwanVpY2V8ZW58MHx8MHx8fDA%3D"
     },
     {
       "id": "17",
@@ -196,7 +185,7 @@
       "status": "available",
       "ordersCount": 41,
       "revenue": 3198000,
-      "image": "https://images.unsplash.com/photo-1514986888952-8cd320577b68?auto=format&fit=crop&w=400&q=80"
+      "image": "https://images.unsplash.com/photo-1624299831638-82c15fcafd2b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8QXBwbGUlMjBQaWV8ZW58MHx8MHx8fDA%3D"
     },
     {
       "id": "19",
@@ -218,18 +207,7 @@
       "status": "available",
       "ordersCount": 24,
       "revenue": 840000,
-      "image": "https://images.unsplash.com/photo-1510626176961-4b37d0f0b831?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      "id": "121a",
-      "ordersCount": 0,
-      "revenue": 0,
-      "name": "test add",
-      "price": 111000,
-      "category": "Mì Ý",
-      "status": "available",
-      "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=300&q=80",
-      "description": "chỉ là test add"
+      "image": "https://images.unsplash.com/photo-1621330716555-5cad596c4562?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHNvZGF8ZW58MHx8MHx8fDA%3D"
     }
   ],
   "orders": [
@@ -354,6 +332,18 @@
       "joinedAt": "2023-11-18",
       "address": "18 Trần Não, TP. Thủ Đức",
       "notes": "Thích món salad và đồ uống giải nhiệt."
+    },
+    {
+      "name": "Nguyễn Đức Trung",
+      "email": "ductrung2@gmail.com",
+      "phone": "0982512111",
+      "tier": "VIP",
+      "address": "24 Nguyễn Trãi, Tp Hồ Chí Minh",
+      "notes": "Thích ăn gì",
+      "totalOrders": 0,
+      "totalSpend": 0,
+      "joinedAt": "2025-11-14T05:23:14.092Z",
+      "id": "BI1c_Qd"
     }
   ],
   "users": [

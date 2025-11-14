@@ -81,7 +81,7 @@ npm run dev
 - Sales: `sales / sales123`
 
 ## 5. Khả năng mở rộng
-- Có thể thay thế `db.json` bằng database thật (MongoDB, PostgreSQL) bằng cách dựng backend Node/Express dùng cùng ma trận quyền.
+- Có thể thay thế `db.json` bằng database thật (MongoDB, PostgreSQL) 
 - Bổ sung refresh token, mã hoá mật khẩu (BCrypt) nếu đưa vào sản phẩm thực tế.
 - Tách chức năng thống kê (Overview) thành micro-service (ví dụ Cloud Functions) khi cần realtime chart.
 

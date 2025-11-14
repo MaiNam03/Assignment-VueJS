@@ -600,9 +600,13 @@ const handleCustomerDelete = async (customerId) => {
       </p>
     </div>
 
-    <div v-else class="mx-auto flex max-w-6xl flex-col gap-8">
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <nav class="flex items-center gap-2 rounded-full bg-white p-1 shadow-card ring-1 ring-slate-100">
+    <div v-else class="mx-auto flex w-full max-w-6xl flex-col gap-8">
+      <div
+        class="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-6"
+      >
+        <nav
+          class="flex w-full flex-wrap items-center gap-2 rounded-full bg-white p-1 shadow-card ring-1 ring-slate-100 lg:flex-nowrap"
+        >
           <button
             v-for="tab in moduleTabs"
             :key="tab.key"
