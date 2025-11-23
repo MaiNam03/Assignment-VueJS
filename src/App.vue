@@ -78,7 +78,7 @@ const bootstrapData = async () => {
     orders.value = orderData
     customers.value = customerData
   } catch (error) {
-    console.error('Failed to load data from db.json', error)
+    console.error('Failed to load data from API', error)
     window.alert('Khong the tai du lieu. Vui long kiem tra server API va thong tin dang nhap.')
   }
 }
@@ -204,8 +204,22 @@ const previewCustomer = ref(null)
 
 const previewOrder = ref(null)
 
+const defaultProductCategories = [
+  'Mon an',
+  'Do uong',
+  'Trang mieng',
+  'Salad',
+  'Khai vi',
+  'Bakery',
+]
+
 const categories = computed(() => {
-  const unique = new Set(products.value.map((product) => product.category))
+  const unique = new Set(defaultProductCategories)
+  products.value.forEach((product) => {
+    if (product.category) {
+      unique.add(product.category)
+    }
+  })
   return Array.from(unique)
 })
 

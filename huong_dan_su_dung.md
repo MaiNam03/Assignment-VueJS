@@ -1,26 +1,26 @@
-# Báo cáo phân tích & thiết kế ứng dụng quản lý cửa hàng (Vue + JSON Server)
+# Báo cáo phân tích & thiết kế ứng dụng quản lý cửa hàng (Vue + Express + MongoDB)
 
 ## 1. Mục tiêu & phạm vi
 - Xây dựng dashboard quản trị cho quán cà phê/tiệm ăn với 3 nghiệp vụ chính: quản lý sản phẩm, đơn hàng, khách hàng.
 - Hỗ trợ phân quyền 2 vai trò:
   - **Admin**: toàn quyền CRUD mọi thực thể.
   - **Nhân viên bán hàng (Sales)**: đọc sản phẩm, được phép tạo/cập nhật khách hàng, đơn hàng nhưng không được xoá và không được chỉnh sửa/xoá sản phẩm.
-- Dữ liệu phải được lưu trực tiếp vào `db.json`, dễ dàng nhân bản khi triển khai/tập huấn.
+- Dữ liệu được lưu trực tiếp vào MongoDB; bộ dữ liệu mẫu đã được khởi tạo sẵn trong database.
 
 ## 2. Tổng quan kiến trúc
 
 | Lớp | Công nghệ | Mô tả |
 | --- | --- | --- |
 | Giao diện (Client) | Vue 3, Vite, Composition API, TailwindCSS | Giao diện SPA hiển thị bảng, modal CRUD, biểu đồ thống kê. |
-| API trung gian | `json-server` tùy biến (`server.cjs`) chạy Node.js | Phơi bày REST API CRUD `products`, `orders`, `customers`, `users` + endpoint `/login` và middleware kiểm tra quyền. |
-| Lưu trữ | File `db.json` | Coi như database NoSQL mini, đồng thời là fixture để demo. |
+| API trung gian | Express + Mongoose (`server.cjs`) chạy Node.js | Phơi bày REST API CRUD `products`, `orders`, `customers`, `users` + endpoint `/login` và middleware kiểm tra quyền (lưu trữ ở MongoDB). |
+| Lưu trữ | MongoDB (local hoặc Atlas). | Có thể dùng Atlas hoặc bản cài cục bộ tùy hạ tầng. |
 
 Luồng chính:
 1. Người dùng mở SPA → bắt buộc đăng nhập (admin/sales).
 2. Client gọi `POST /login` lấy token (base64 chứa role).
 3. Token được lưu `localStorage` và chèn vào mọi request (`Authorization: Bearer ...`).
 4. Server xác thực token + kiểm tra quyền theo ma trận `rolePermissions`.
-5. Nếu hợp lệ, request được chuyển tiếp vào router của json-server, ghi/đọc thẳng `db.json`.
+5. Nếu hợp lệ, request được chuyển tiếp vào controller Express, ghi/đọc trực tiếp các collection MongoDB.
 
 ## 3. Thiết kế chi tiết
 
@@ -61,17 +61,21 @@ Luồng chính:
 ### 4.1 Yêu cầu môi trường
 - Node.js >= 18.
 - npm (đi kèm Node).
-
+- Một instance MongoDB sẵn sàng 
 ### 4.2 Các bước
 ```bash
 # 1. Cài dependencies
 npm install
 
-# 2. Chạy REST API với phân quyền
-npm run api
-# Giữ terminal này mở, sẽ log: Role-based json-server is running at http://localhost:4000
+# 2. (Tuỳ chọn) Xuất biến môi trường nếu bạn không dùng URI mặc định
+mongodb+srv://tlmainam03_db_user:qDu1kfhuWxdJ2fk0@cluster0.w0jlxtq.mongodb.net/
 
-# 3. Mở terminal khác để chạy frontend
+
+# 3. Chạy REST API với phân quyền (Express + MongoDB)
+ npm run api
+# Log: Mongo-powered API is running at http://localhost:4000
+
+# 4. Mở terminal khác để chạy frontend
 npm run dev
 # Mặc định Vite chạy ở http://localhost:5173
 ```
@@ -81,14 +85,13 @@ npm run dev
 - Sales: `sales / sales123`
 
 ## 5. Khả năng mở rộng
-- Có thể thay thế `db.json` bằng database thật (MongoDB, PostgreSQL) 
+- Có thể mở rộng sang các database khác (PostgreSQL, dịch vụ MongoDB Atlas, ...) 
 - Bổ sung refresh token, mã hoá mật khẩu (BCrypt) nếu đưa vào sản phẩm thực tế.
 - Tách chức năng thống kê (Overview) thành micro-service (ví dụ Cloud Functions) khi cần realtime chart.
 
 ## 6. Kết luận
 Giải pháp hiện tại đáp ứng yêu cầu Y2:
-1. Có REST API quản lý sản phẩm/đơn hàng/khách hàng lưu trữ vào `db.json`.
+1. Có REST API quản lý sản phẩm/đơn hàng/khách hàng lưu trữ trực tiếp ở MongoDB.
 2. Có cơ chế phân quyền rõ ràng giữa admin và nhân viên bán hàng, được enforce ở cả backend lẫn frontend.
 
-Kiến trúc client nhẹ + json-server giúp triển khai nhanh cho các bài tập/thử nghiệm; đồng thời giữ cấu trúc đủ rõ ràng để nâng cấp lên hệ thống sản xuất sau này.
-
+Kiến trúc client nhẹ + backend Express/Mongo giúp triển khai nhanh cho các bài tập/thử nghiệm; đồng thời giữ cấu trúc đủ rõ ràng để nâng cấp lên hệ thống sản xuất sau này.
