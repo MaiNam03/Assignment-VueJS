@@ -1,0 +1,120 @@
+<script setup>
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+import AddCustomerModal from './components/AddCustomerModal.vue'
+import AddProductModal from './components/AddProductModal.vue'
+import CustomerTable from './components/CustomerTable.vue'
+import OrderTable from './components/OrderTable.vue'
+import OverviewDashboard from './components/OverviewDashboard.vue'
+import ProductTable from './components/ProductTable.vue'
+import CustomerPortal from './components/CustomerPortal.vue'
+import UserManagement from './components/UserManagement.vue'
+import { api, setAuthToken } from './services/api'
+
+const products = ref([])
+
+const orders = ref([])
+
+const customers = ref([])
+
+const users = ref([])
+
+const readStoredSession = () => {
+  if (typeof window === 'undefined') {
+    return { token: '', user: null }
+  }
+  try {
+    const token = window.localStorage.getItem('authToken') ?? ''
+    const userRaw = window.localStorage.getItem('currentUser')
+    const user = userRaw ? JSON.parse(userRaw) : null
+    return { token, user }
+  } catch (error) {
+    return { token: '', user: null }
+  }
+}
+
+const { token: initialToken, user: initialUser } = readStoredSession()
+
+const authToken = ref(initialToken)
+const currentUser = ref(initialUser)
+
+if (authToken.value) {
+  setAuthToken(authToken.value)
+}
+
+const isAuthenticated = computed(() => Boolean(authToken.value && currentUser.value))
+const effectiveRole = computed(() => {
+  const role = currentUser.value?.role
+  if (!role) {
+    return ''
+  }
+  return role === 'sales' ? 'staff' : role
+})
+
+const loginForm = reactive({
+  name: '',
+  username: '',
+  password: '',
+})
+
+const authError = ref('')
+const isAuthenticating = ref(false)
+const showLoginModal = ref(false)
+const authMode = ref('login')
+
+const roleLabels = {
+  admin: 'Quan tri vien',
+  staff: 'Nhan vien',
+  sales: 'Nhan vien',
+  customer: 'Khach hang',
+}
+
+const currentRoleLabel = computed(() =>
+  effectiveRole.value ? roleLabels[effectiveRole.value] ?? effectiveRole.value : 'Chua xac dinh',
+)
+
+const assignableRoles = [
+  { value: 'staff', label: 'Nhan vien' },
+  { value: 'customer', label: 'Khach hang' },
+]
+
+const isLoadingUsers = ref(false)
+const creatingUser = ref(false)
+const savingUserId = ref('')
+const deletingUserId = ref('')
+const placingCustomerOrder = ref(false)
+
+const resetDataCollections = () => {
+  products.value = []
+  orders.value = []
+  customers.value = []
+  users.value = []
+  isLoadingUsers.value = false
+}
+
+const bootstrapData = async () => {
+  resetDataCollections()
+  const role = effectiveRole.value
+  const loaders = []
+
+  loaders.push(
+    api
+      .fetchProducts({ skipAuth: !isAuthenticated.value })
+      .then((productData) => {
+        products.value = productData
+      })
+      .catch((error) => {
+        console.error('Failed to load products', error)
+      }),
+  )
+
+  if (isAuthenticated.value && ['admin', 'staff'].includes(role)) {
+    loaders.push(
+      api.fetchOrders().then((orderData) => {
+        orders.value = orderData
+      }),
+    )
+    loaders.push(
+      api.fetchCustomers().then((customerData) => {
+        customers.value = customerData
+      }),
+    )

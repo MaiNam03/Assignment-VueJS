@@ -6,6 +6,7 @@
     <td class="py-4 pr-3">
       <div class="font-semibold text-slate-800">{{ order.customer }}</div>
       <p class="text-xs text-slate-500">Đặt lúc {{ formattedDate }}</p>
+      <p v-if="order.phone" class="text-[11px] text-slate-400">SĐT: {{ order.phone }}</p>
     </td>
     <td class="py-4 pr-3">
       <p class="text-sm text-slate-600 line-clamp-2">

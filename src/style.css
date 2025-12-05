@@ -65,6 +65,21 @@ button:focus-visible {
   text-align: center;
 }
 
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  min-width: 100%;
+  animation: marquee 18s linear infinite;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

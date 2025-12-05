@@ -66,7 +66,16 @@ export const api = {
       body: JSON.stringify(credentials),
       skipAuth: true,
     }),
-  fetchProducts: () => request(buildPath('products')),
+  register: (payload) =>
+    request('/register', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      skipAuth: true,
+    }),
+  fetchProducts: (options = {}) =>
+    request(buildPath('products'), {
+      ...options,
+    }),
   createProduct: (payload) =>
     request(buildPath('products'), {
       method: 'POST',
@@ -97,6 +106,12 @@ export const api = {
       method: 'DELETE',
     }),
   fetchOrders: () => request(buildPath('orders')),
+  createOrder: (payload, options = {}) =>
+    request(buildPath('orders'), {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      skipAuth: options.skipAuth ?? false,
+    }),
   updateOrder: (id, payload) =>
     request(buildPath('orders', id), {
       method: 'PATCH',
@@ -104,6 +119,21 @@ export const api = {
     }),
   deleteOrder: (id) =>
     request(buildPath('orders', id), {
+      method: 'DELETE',
+    }),
+  fetchUsers: () => request(buildPath('users')),
+  createUser: (payload) =>
+    request(buildPath('users'), {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  updateUser: (id, payload) =>
+    request(buildPath('users', id), {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }),
+  deleteUser: (id) =>
+    request(buildPath('users', id), {
       method: 'DELETE',
     }),
 }

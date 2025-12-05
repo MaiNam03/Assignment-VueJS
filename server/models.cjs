@@ -132,6 +132,22 @@ const Order = mongoose.model(
           type: String,
           required: true,
         },
+        customerId: {
+          type: String,
+          default: '',
+        },
+        username: {
+          type: String,
+          default: '',
+        },
+        phone: {
+          type: String,
+          default: '',
+        },
+        email: {
+          type: String,
+          default: '',
+        },
         items: {
           type: String,
           required: true,
@@ -188,8 +204,12 @@ const User = mongoose.model(
         },
         role: {
           type: String,
-          enum: ['admin', 'sales'],
+          enum: ['admin', 'staff', 'sales', 'customer'],
           required: true,
+        },
+        permissions: {
+          type: [String],
+          default: [],
         },
       },
       defaultSchemaOptions,
