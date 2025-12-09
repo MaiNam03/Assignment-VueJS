@@ -27,6 +27,21 @@ const buildPath = (resource, id) =>
     ? `/${resource}/${encodeURIComponent(String(id))}`
     : `/${resource}`
 
+const buildQueryString = (params = {}) => {
+  const entries = Object.entries(params || {}).filter(
+    ([, value]) => value !== undefined && value !== null && value !== '',
+  )
+  if (!entries.length) {
+    return ''
+  }
+  const searchParams = new URLSearchParams()
+  entries.forEach(([key, value]) => {
+    searchParams.append(key, String(value))
+  })
+  const query = searchParams.toString()
+  return query ? `?${query}` : ''
+}
+
 const request = async (path, options = {}) => {
   const { skipAuth = false, ...rest } = options
   const headers = {
@@ -105,7 +120,13 @@ export const api = {
     request(buildPath('customers', id), {
       method: 'DELETE',
     }),
-  fetchOrders: () => request(buildPath('orders')),
+  fetchOrders: (options = {}) => {
+    const { query, ...rest } = options
+    const queryString = buildQueryString(query)
+    return request(`${buildPath('orders')}${queryString}`, {
+      ...rest,
+    })
+  },
   createOrder: (payload, options = {}) =>
     request(buildPath('orders'), {
       method: 'POST',

@@ -33,7 +33,7 @@ const rolePermissions = {
   },
   customer: {
     products: ['GET'],
-    orders: ['POST'],
+    orders: ['GET', 'POST', 'PATCH'],
   },
 }
 
@@ -156,6 +156,47 @@ const ensureCustomerForUser = async (user) => {
     buildCustomerFromUser(user),
     { upsert: true, new: true },
   )
+}
+
+const escapeRegex = (value) => String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+const normalizeSearchText = (value) => String(value || '').trim().toLowerCase()
+
+const isOrderOwnedByUser = (order, user) => {
+  if (!order || !user) {
+    return false
+  }
+  const matchesById =
+    order.customerId && ensureId(order.customerId) === ensureId(user.id)
+  const matchesByUsername =
+    order.username &&
+    normalizeSearchText(order.username) === normalizeSearchText(user.username)
+  const matchesByName =
+    order.customer &&
+    normalizeSearchText(order.customer) === normalizeSearchText(user.name)
+
+  return Boolean(matchesById || matchesByUsername || matchesByName)
+}
+
+const buildOrderOwnershipQuery = (user) => {
+  if (!user) {
+    return {}
+  }
+  const conditions = []
+  if (user.id) {
+    conditions.push({ customerId: ensureId(user.id) })
+  }
+  if (user.username) {
+    conditions.push({
+      username: new RegExp(`^${escapeRegex(user.username)}$`, 'i'),
+    })
+  }
+  if (user.name) {
+    conditions.push({
+      customer: new RegExp(`^${escapeRegex(user.name)}$`, 'i'),
+    })
+  }
+  return conditions.length ? { $or: conditions } : {}
 }
 
 const hasAnotherAdmin = async (excludeUserId) => {
@@ -374,7 +415,104 @@ app.use(
 
 app.use('/products', createCrudRouter('San pham', Product))
 app.use('/customers', createCrudRouter('Khach hang', Customer))
-app.use('/orders', createCrudRouter('Don hang', Order))
+
+const ordersRouter = express.Router()
+
+ordersRouter.get(
+  '/',
+  asyncHandler(async (req, res) => {
+    const query =
+      req.user?.role === 'customer' ? buildOrderOwnershipQuery(req.user) : {}
+    const orders = await Order.find(query).lean()
+    res.json(orders.map(formatDocument))
+  }),
+)
+
+ordersRouter.get(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const order = await Order.findOne({ id: ensureId(req.params.id) }).lean()
+    if (!order) {
+      return res.status(404).json({ message: 'Don hang khong ton tai' })
+    }
+    if (req.user?.role === 'customer' && !isOrderOwnedByUser(order, req.user)) {
+      return respondForbidden(res, 'Ban khong co quyen xem don hang nay')
+    }
+    return res.json(formatDocument(order))
+  }),
+)
+
+ordersRouter.post(
+  '/',
+  asyncHandler(async (req, res) => {
+    const payload = sanitizePayload(req.body)
+    payload.id = ensureId(payload.id) || randomUUID()
+    const created = await Order.create(payload)
+    res.status(201).json(formatDocument(created))
+  }),
+)
+
+ordersRouter.patch(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const payload = sanitizePayload(req.body)
+    delete payload.id
+    const orderId = ensureId(req.params.id)
+
+    const existing = await Order.findOne({ id: orderId }).lean()
+    if (!existing) {
+      return res.status(404).json({ message: 'Don hang khong ton tai' })
+    }
+
+    if (req.user?.role === 'customer') {
+      if (!isOrderOwnedByUser(existing, req.user)) {
+        return respondForbidden(res, 'Ban khong co quyen sua don hang nay')
+      }
+
+      if (payload.status !== 'cancelled') {
+        return respondForbidden(res, 'Chi co the huy don hang cua ban.')
+      }
+
+      if (['cancelled', 'delivered'].includes(existing.status)) {
+        return res
+          .status(400)
+          .json({ message: 'Don hang da duoc xu ly, khong the huy.' })
+      }
+
+      const cancelled = await Order.findOneAndUpdate(
+        { id: orderId },
+        { status: 'cancelled' },
+        { new: true, runValidators: true },
+      ).lean()
+      return res.json(formatDocument(cancelled))
+    }
+
+    const updated = await Order.findOneAndUpdate(
+      { id: orderId },
+      payload,
+      { new: true, runValidators: true },
+    ).lean()
+
+    if (!updated) {
+      return res.status(404).json({ message: 'Don hang khong ton tai' })
+    }
+
+    return res.json(formatDocument(updated))
+  }),
+)
+
+ordersRouter.delete(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const deleted = await Order.findOneAndDelete({ id: ensureId(req.params.id) })
+    if (!deleted) {
+      return res.status(404).json({ message: 'Don hang khong ton tai' })
+    }
+    return res.status(204).end()
+  }),
+)
+
+app.use('/orders', ordersRouter)
 
 const usersRouter = express.Router()
 usersRouter.get(

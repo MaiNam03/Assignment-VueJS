@@ -8,6 +8,22 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  orders: {
+    type: Array,
+    default: () => [],
+  },
+  orderStatuses: {
+    type: Array,
+    default: () => [],
+  },
+  ordersLoading: {
+    type: Boolean,
+    default: false,
+  },
+  cancellingOrderId: {
+    type: String,
+    default: '',
+  },
   submitting: {
     type: Boolean,
     default: false,
@@ -22,7 +38,13 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['place-order', 'open-login', 'logout'])
+const emit = defineEmits([
+  'place-order',
+  'open-login',
+  'logout',
+  'refresh-orders',
+  'cancel-order',
+])
 
 const customerPages = [
   { key: 'home', label: 'Trang chủ' },
@@ -95,12 +117,49 @@ const cartTotal = computed(() =>
   cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0),
 )
 
+const customerOrders = computed(() =>
+  [...(props.orders || [])].sort(
+    (a, b) =>
+      new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime(),
+  ),
+)
+
 const formatCurrency = (value) =>
   new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
     minimumFractionDigits: 0,
   }).format(value ?? 0)
+
+const fallbackStatus = {
+  label: 'Dang cap nhat',
+  badge: 'bg-slate-100 text-slate-600',
+  dot: 'bg-slate-400',
+}
+
+const getStatusInfo = (status) =>
+  props.orderStatuses.find((item) => item.value === status) || fallbackStatus
+
+const formatDateTime = (value) =>
+  value
+    ? new Intl.DateTimeFormat('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }).format(new Date(value))
+    : ''
+
+const canCancelOrder = (order) =>
+  props.isAuthenticated &&
+  order &&
+  ['pending', 'processing'].includes(order.status)
+
+const handleCancelOrder = (order) => {
+  if (!order || !canCancelOrder(order)) return
+  emit('cancel-order', order.id)
+}
 
 const flashAdded = (id) => {
   addedProductIds.value = addedProductIds.value.filter((x) => x !== id)
@@ -122,6 +181,9 @@ const matchesSearch = (product) => {
 
 const goToPage = (key) => {
   activePage.value = key
+  if (key === 'orders' && props.isAuthenticated) {
+    emit('refresh-orders')
+  }
 }
 
 const focusProducts = async () => {
@@ -369,6 +431,14 @@ const placeOrder = () => {
               @click="emit('open-login')"
             >
               Đăng nhập
+            </button>
+            <button
+              v-if="isAuthenticated"
+              type="button"
+              class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-inner transition hover:border-primary hover:text-primary"
+              @click="goToPage('orders')"
+            >
+              Đơn hàng ({{ customerOrders.length }})
             </button>
             <button
               type="button"
@@ -672,6 +742,130 @@ const placeOrder = () => {
               >
                 {{ submitting ? 'Đang đặt hàng...' : 'Đặt hàng' }}
               </button>
+            </div>
+          </section>
+
+          <section v-else-if="activePage === 'orders'" class="space-y-4">
+            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-slate-900">Đơn hàng của bạn</h2>
+                <p class="text-sm text-slate-500">
+                  Theo dõi trạng thái đơn hàng đã đặt và cập nhật nhanh chóng.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  class="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 transition hover:border-primary hover:text-primary"
+                  :disabled="ordersLoading"
+                  @click="emit('refresh-orders')"
+                >
+                  {{ ordersLoading ? 'Đang tải...' : 'Làm mới' }}
+                </button>
+                <button
+                  type="button"
+                  class="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 transition hover:border-primary hover:text-primary"
+                  @click="goToPage('home')"
+                >
+                  Tiếp tục mua
+                </button>
+              </div>
+            </div>
+
+            <div
+              v-if="!isAuthenticated"
+              class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600"
+            >
+              <p class="font-semibold text-slate-800">Đăng nhập để xem đơn hàng của bạn.</p>
+              <div class="mt-3 flex gap-2">
+                <button
+                  type="button"
+                  class="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white shadow-md transition hover:bg-primary-strong"
+                  @click="emit('open-login')"
+                >
+                  Đăng nhập
+                </button>
+                <button
+                  type="button"
+                  class="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-primary hover:text-primary"
+                  @click="goToPage('home')"
+                >
+                  Mua ngay
+                </button>
+              </div>
+            </div>
+
+            <div
+              v-else-if="ordersLoading"
+              class="rounded-2xl border border-slate-100 bg-white p-4 text-sm text-slate-500"
+            >
+              Đang tải danh sách đơn hàng...
+            </div>
+
+            <div
+              v-else-if="!customerOrders.length"
+              class="rounded-2xl border border-dashed border-slate-200 p-4 text-sm text-slate-500"
+            >
+              Bạn chưa có đơn hàng nào. Đặt món ngay để thưởng thức.
+            </div>
+
+            <div v-else class="grid gap-3 md:grid-cols-2">
+              <article
+                v-for="order in customerOrders"
+                :key="order.id"
+                class="space-y-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <p class="text-xs font-semibold uppercase text-slate-400">Mã đơn</p>
+                    <p class="text-sm font-semibold text-slate-900">{{ order.id }}</p>
+                    <p class="text-xs text-slate-500">Đặt lúc {{ formatDateTime(order.createdAt) }}</p>
+                  </div>
+                  <span
+                    class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold"
+                    :class="getStatusInfo(order.status).badge"
+                  >
+                    <span class="inline-block h-2 w-2 rounded-full" :class="getStatusInfo(order.status).dot" />
+                    {{ getStatusInfo(order.status).label }}
+                  </span>
+                </div>
+                <div class="space-y-2 text-sm text-slate-600">
+                  <p>
+                    <span class="font-semibold text-slate-900">Sản phẩm:</span>
+                    {{ order.items }}
+                  </p>
+                  <p>
+                    <span class="font-semibold text-slate-900">Thanh toán:</span>
+                    {{ order.payment || 'Chưa cập nhật' }}
+                  </p>
+                  <p>
+                    <span class="font-semibold text-slate-900">Giao đến:</span>
+                    {{ order.address || 'Chưa cập nhật' }}
+                  </p>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-semibold text-slate-700">
+                    Tổng: <span class="text-primary">{{ formatCurrency(order.total) }}</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      type="button"
+                      class="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-primary hover:text-primary"
+                      @click="goToPage('home')"
+                    >
+                      Mua thêm
+                    </button>
+                    <button
+                      type="button"
+                      class="rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-600 ring-1 ring-rose-100 transition hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-60"
+                      :disabled="!canCancelOrder(order) || cancellingOrderId === order.id"
+                      @click="handleCancelOrder(order)"
+                    >
+                      {{ cancellingOrderId === order.id ? 'Đang hủy...' : 'Hủy đơn' }}
+                    </button>
+                  </div>
+                </div>
+              </article>
             </div>
           </section>
         </div>

@@ -88,10 +88,12 @@ const assignableRoles = [
 ]
 
 const isLoadingUsers = ref(false)
+const isLoadingOrders = ref(false)
 const creatingUser = ref(false)
 const savingUserId = ref('')
 const deletingUserId = ref('')
 const placingCustomerOrder = ref(false)
+const cancellingCustomerOrderId = ref('')
 const showThankYou = ref(false)
 const thankYouSummary = ref(null)
 
@@ -101,6 +103,32 @@ const resetDataCollections = () => {
   customers.value = []
   users.value = []
   isLoadingUsers.value = false
+  isLoadingOrders.value = false
+  cancellingCustomerOrderId.value = ''
+}
+
+const loadOrdersForCurrentRole = async () => {
+  if (!isAuthenticated.value) {
+    orders.value = []
+    isLoadingOrders.value = false
+    return
+  }
+
+  const role = effectiveRole.value
+  const requestOptions = role === 'customer' ? { query: { mine: '1' } } : {}
+
+  isLoadingOrders.value = true
+  try {
+    const orderData = await api.fetchOrders(requestOptions)
+    orders.value = orderData
+  } catch (error) {
+    console.error('Failed to load orders', error)
+    if (role === 'customer') {
+      window.alert(error.message || 'Khong the tai danh sach don hang cua ban.')
+    }
+  } finally {
+    isLoadingOrders.value = false
+  }
 }
 
 const bootstrapData = async () => {
@@ -119,33 +147,35 @@ const bootstrapData = async () => {
       }),
   )
 
-  if (isAuthenticated.value && ['admin', 'staff'].includes(role)) {
-    loaders.push(
-      api.fetchOrders().then((orderData) => {
-        orders.value = orderData
-      }),
-    )
-    loaders.push(
-      api.fetchCustomers().then((customerData) => {
-        customers.value = customerData
-      }),
-    )
-  }
+  if (isAuthenticated.value) {
+    loaders.push(loadOrdersForCurrentRole())
 
-  if (isAuthenticated.value && role === 'admin') {
-    isLoadingUsers.value = true
-    loaders.push(
-      api
-        .fetchUsers()
-        .then((userData) => {
-          users.value = userData
-        })
-        .finally(() => {
-          isLoadingUsers.value = false
+    if (['admin', 'staff'].includes(role)) {
+      loaders.push(
+        api.fetchCustomers().then((customerData) => {
+          customers.value = customerData
         }),
-    )
+      )
+    }
+
+    if (role === 'admin') {
+      isLoadingUsers.value = true
+      loaders.push(
+        api
+          .fetchUsers()
+          .then((userData) => {
+            users.value = userData
+          })
+          .finally(() => {
+            isLoadingUsers.value = false
+          }),
+      )
+    } else {
+      isLoadingUsers.value = false
+    }
   } else {
     isLoadingUsers.value = false
+    isLoadingOrders.value = false
   }
 
   try {
@@ -476,6 +506,32 @@ const resolvedOrders = computed(() =>
         address: order.address || matchedCustomer?.address || '',
       }
     }),
+)
+
+const isOrderOwnedByCurrentCustomer = (order) => {
+  if (!order || effectiveRole.value !== 'customer' || !currentUser.value) {
+    return false
+  }
+  const orderCustomerId = order.customerId ? String(order.customerId) : ''
+  const userId = currentUser.value?.id ? String(currentUser.value.id) : ''
+  const orderCustomer = normalizeText(order.customer)
+  const orderUsername = normalizeText(order.username)
+  const currentName = normalizeText(currentUser.value?.name)
+  const currentUsername = normalizeText(currentUser.value?.username)
+
+  return (
+    (!!userId && orderCustomerId === userId) ||
+    (!!currentUsername && orderUsername === currentUsername) ||
+    (!!currentName && orderCustomer === currentName)
+  )
+}
+
+const customerOrders = computed(() =>
+  resolvedOrders.value
+    .filter((order) => isOrderOwnedByCurrentCustomer(order))
+    .sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    ),
 )
 
 const orderStats = computed(() => {
@@ -984,6 +1040,46 @@ const handleCustomerPlaceOrder = async (payload) => {
     placingCustomerOrder.value = false
   }
 }
+
+const handleRefreshCustomerOrders = async () => {
+  if (!isAuthenticated.value || effectiveRole.value !== 'customer') {
+    return
+  }
+  await loadOrdersForCurrentRole()
+}
+
+const handleCustomerCancelOrder = async (orderId) => {
+  if (!isAuthenticated.value || effectiveRole.value !== 'customer') {
+    window.alert('Ban can dang nhap tai khoan khach hang de quan ly don hang.')
+    return
+  }
+  const target = orders.value.find((order) => order.id === orderId)
+  if (!target) {
+    window.alert('Khong tim thay don hang can huy.')
+    return
+  }
+  if (['cancelled', 'delivered'].includes(target.status)) {
+    window.alert('Don hang da duoc xu ly, khong the huy.')
+    return
+  }
+  if (!window.confirm(`Ban muon huy don h…ng ${orderId}?`)) {
+    return
+  }
+  cancellingCustomerOrderId.value = orderId
+  try {
+    const updated = await api.updateOrder(orderId, { status: 'cancelled' })
+    orders.value = orders.value.map((order) =>
+      order.id === orderId ? updated : order,
+    )
+    if (previewOrder.value?.id === orderId) {
+      previewOrder.value = updated
+    }
+  } catch (error) {
+    notifyActionError(error.message || 'Khong the huy don hang.', error)
+  } finally {
+    cancellingCustomerOrderId.value = ''
+  }
+}
 </script>
 
 <template>
@@ -995,11 +1091,17 @@ const handleCustomerPlaceOrder = async (payload) => {
       <CustomerPortal
         v-if="!showThankYou"
         :products="products"
+        :orders="customerOrders"
+        :orders-loading="isLoadingOrders"
+        :order-statuses="orderStatuses"
         :submitting="placingCustomerOrder"
         :is-authenticated="isAuthenticated"
         :current-user="currentUser"
+        :cancelling-order-id="cancellingCustomerOrderId"
         @place-order="handleCustomerPlaceOrder"
         @open-login="showLoginModal = true"
+        @refresh-orders="handleRefreshCustomerOrders"
+        @cancel-order="handleCustomerCancelOrder"
         @logout="handleLogout"
       />
       <div
