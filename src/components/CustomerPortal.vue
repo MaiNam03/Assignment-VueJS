@@ -734,6 +734,7 @@ const placeOrder = () => {
                 placeholder="Ghi chú (không bắt buộc)"
                 class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
+              <p>Nếu quý khách chuyển khoản: 0838878888 - MB BANK - Trần Lương Mai Nam</p>
               <button
                 type="button"
                 class="w-full rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none"
@@ -912,7 +913,7 @@ const placeOrder = () => {
           <span class="rounded-full bg-white/5 px-3 py-1">Email: support@polyfood.vn</span>
           <span class="rounded-full bg-white/5 px-3 py-1">© 2025 FPoly Food</span>
           <span class="rounded-full bg-white/5 px-3 py-1"
-            >Đội ngũ phát triển: Nguyễn Ngọc Hoàng, Nguyễn Đức Trung, Trần Lương Mai Nam</span
+            >Đội ngũ phát triển: Vũ Ngọc Hoàng, Nguyễn Đức Trung, Trần Lương Mai Nam</span
           >
         </div>
       </div>
